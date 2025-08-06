@@ -1356,7 +1356,7 @@ end
 
 ----- GENERAL
 
-function update_menu()
+function update_active_menu()
   if btnp(5) or btnp(4) then
     init_level()
     level = 2
@@ -1473,7 +1473,7 @@ function _update()
   level_frame = level_frame + 1
 
   if level == 1 then
-    update_menu()
+    update_active_menu()
   elseif level == 2 then
     update_level()
   elseif level == 3 then
