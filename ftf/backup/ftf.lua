@@ -585,9 +585,14 @@ function draw_col(obj)
     local r = obj.r
     local i = flr(frame / 15) % 2 + 1
     local c = obj.c
-    -- fill collision outline
-    -- ovalfill(obj.x + c.x - r, obj.y + c.y - r, obj.x + r + c.x - 1, obj.y + r + c.y - 1, 1)
-    oval(obj.x + c.x - r, obj.y + c.y - r, obj.x + r + c.x - 1, obj.y + r + c.y - 1, col_colors[i])
+    local x1 = obj.x + c.x - r
+    local y1 = obj.y + c.y - r
+    local x2 = obj.x + r + c.x - 1
+    local y2 = obj.y + r + c.y - 1
+
+    oval(x1 - 1, y1 - 1, x2 + 1, y2 + 1, 0)
+    oval(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0)
+    oval(x1, y1, x2, y2, col_colors[i])
   end
 end
 
@@ -702,6 +707,7 @@ function spawn_bullet(x, y, direction, animation)
     animation = animation,
     direction = direction
   })
+
   play_sound(0)
 end
 

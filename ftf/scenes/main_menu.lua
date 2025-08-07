@@ -2,7 +2,7 @@ menu_main = {
   {
     label = "play",
     on_select = function()
-      scene = "game"
+      init_level_one()
     end
   },
   {
@@ -15,7 +15,7 @@ menu_main = {
     label = "settings",
     on_select = function()
       menu = menu_settings
-      selected_item = 1
+      menu_selected_item = 1
     end
   },
 }
@@ -25,19 +25,19 @@ menu_settings = {
     label = "difficulty",
     options = { "easy", "medium", "hard" },
     default = 1,
-    location = 10,
+    location = STORAGE_DIFFICULTY,
   },
   {
     label = "music",
     options = { "off", "on" },
     default = 1,
-    location = 11,
+    location = STORAGE_MUSIC,
   },
   {
     label = "sfx",
     options = { "off", "on" },
     default = 1,
-    location = 12,
+    location = STORAGE_SFX,
   },
   {
     label = "back",
@@ -50,5 +50,5 @@ menu_settings = {
 function init_main_menu()
   scene = "menu"
   menu = menu_main
-  selected_item = 1
+  menu_selected_item = 1
 end

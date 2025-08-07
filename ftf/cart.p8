@@ -2,13 +2,27 @@ pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
 
+#include constants.lua
 #include main.lua
 
+#include lib/animations.lua
+#include lib/bullets.lua
+#include lib/enemies.lua
+#include lib/enemy_bullets.lua
+#include lib/enter_name.lua
+#include lib/explosions.lua
+#include lib/helpers.lua
+#include lib/math.lua
 #include lib/menu.lua
+#include lib/settings.lua
+#include lib/ship.lua
+#include lib/sound.lua
 #include lib/stars.lua
+#include lib/super_weapon.lua
 
-#include scenes/high_scores.lua
 #include scenes/main_menu.lua
+#include scenes/level_one.lua
+#include scenes/high_scores.lua
 
 __gfx__
 22222229922222222222222992222222222222299222222200020000000020000000200000020000000020000002000000033000000bb00000088000000ee000
@@ -306,3 +320,4 @@ __music__
 00 11104344
 00 120f4344
 02 0e134344
+

@@ -20,13 +20,13 @@ function init_stars()
       r = rnd(2)
     }
   end
-  for i = 1, 8 do
+  for i = 1, 5 do
     stars[i] = {
       x = flr(rnd(128)),
       y = flr(rnd(256)) - 128,
       speed = 3,
       color = 13,
-      r = rnd(2)
+      r = 1
     }
   end
 end

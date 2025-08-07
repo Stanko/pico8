@@ -8,16 +8,16 @@ end
 
 function update_active_menu()
   if (btnp(2)) then
-    selected_item = (selected_item - 1) % #menu
+    menu_selected_item = (menu_selected_item - 1) % #menu
   elseif (btnp(3)) then
-    selected_item = (selected_item + 1) % #menu
+    menu_selected_item = (menu_selected_item + 1) % #menu
   end
 
-  if (selected_item == 0) then
-    selected_item = #menu
+  if (menu_selected_item == 0) then
+    menu_selected_item = #menu
   end
 
-  local item = menu[selected_item]
+  local item = menu[menu_selected_item]
 
   if (item.options and item.location) then
     if (btnp(0) or btnp(1)) then
@@ -52,12 +52,13 @@ function draw_active_menu(pos, colors)
   local value_color = colors.value or 12
   local indicator_color = colors.indicator or 9
 
-  print('*', left - 6, top + row * (selected_item - 1), indicator_color)
+  print('*', left - 6, top + row * (menu_selected_item - 1), indicator_color)
 
   for i, item in ipairs(menu) do
     print(item.label, left, top + row * (i - 1), color)
 
     if (item.options) then
+      -- TODO it is probably not a good idea to use dget in the draw loop
       local value = dget(item.location)
       local option_label = item.options[value + 1];
       print(option_label, right - #option_label * 4, top + row * (i - 1), value_color)
