@@ -10,13 +10,12 @@ function _init()
     init_menu_values(menu_settings)
     dset(STORAGE_ALREADY_PLAYED, 1)
 
-    -- TODO remove or replace with real text
-    dset(STORAGE_HIGH_SCORES_START, str_to_int("mfn"))
-    dset(STORAGE_HIGH_SCORES_START + 1, 1000)
-    dset(STORAGE_HIGH_SCORES_START + 2, str_to_int("nvr"))
-    dset(STORAGE_HIGH_SCORES_START + 3, 1000)
-    dset(STORAGE_HIGH_SCORES_START + 4, str_to_int("csm"))
-    dset(STORAGE_HIGH_SCORES_START + 5, 1000)
+    -- TODO remove or replace
+    for i = 1, 10 do
+      local offset = (i - 1) * 2
+      dset(STORAGE_HIGH_SCORES_START + offset, str_to_number("gnd"))
+      dset(STORAGE_HIGH_SCORES_START + offset + 1, 100 - (i - 1) * 10)
+    end
   end
 
   init_stars()
@@ -51,6 +50,7 @@ function _draw()
   elseif scene == "level_one" then
     draw_level_one()
   end
+
 
   draw_animations()
 

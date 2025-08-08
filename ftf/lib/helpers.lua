@@ -74,9 +74,47 @@ function to_string(o)
   if type(o) == "table" then -- recursion
     local str = "{\n"
     for k, v in pairs(o) do
-      str = str .. " " .. tostring(k) .. ":" .. tostring(v) .. "\n"
+      str = str .. " " .. to_string(k) .. ":" .. to_string(v) .. "\n"
     end
     return str .. "}"
   end
   return "unkown" -- should never show
+end
+
+function reverse_table(data)
+  local reversed = {}
+  for i = #data, 1, -1 do
+    add(reversed, data[i])
+  end
+  return reversed
+end
+
+function sort_table_by_field(data, field, desc)
+  -- move a partition backwards,
+  -- beginning with one sorted element
+  for num_sorted = 1, #data - 1 do
+    -- value to insert
+    local new_val = data[num_sorted + 1]
+    local i = num_sorted + 1
+
+    -- shift elements until
+    -- we find the insertion point
+    while i > 1 and new_val[field] < data[i - 1][field] do
+      -- shift up the value we
+      -- compared against
+      data[i] = data[i - 1]
+
+      -- descend to the next value
+      i -= 1
+    end
+
+    -- insert here
+    data[i] = new_val
+  end
+
+  if desc then
+    return reverse_table(data)
+  end
+
+  return data
 end

@@ -69,6 +69,19 @@ function init_ship()
   }
 end
 
+function ship_hit(obj)
+  if ship.lives > 0 then
+    ship.lives -= 1
+    play_sound(1)
+
+    if (ship.lives == 0) then
+      spawn_explosions(ship.x, ship.y, 12, 12, 10, 15)
+    else
+      spawn_explosion(obj.x, obj.y)
+    end
+  end
+end
+
 function update_ship_shoot_em_up()
   if (ship.lives > 0) then
     -- TODO move to the game controller
@@ -153,10 +166,9 @@ function update_ship_shoot_em_up()
           spawn_bullet(positions[i])
         end
 
-        -- TODO score
-        -- if (score > 0) then
-        --   score -= ship.power
-        -- end
+        if (score > 0) then
+          score -= ship.power
+        end
       end
     end
 
@@ -169,12 +181,39 @@ function update_ship_shoot_em_up()
 
         ship.super -= 1
 
-        -- TODO score
-        -- if (score > 8) then
-        --   score -= 8
-        -- end
+        if (score > 8) then
+          score -= 8
+        end
       end
     end
+
+    -- enemy bullets collisions
+    for i = #enemy_bullets, 1, -1 do
+      local bullet = enemy_bullets[i]
+
+      if collision(bullet, ship) then
+        ship_hit(bullet)
+        deli(enemy_bullets, i)
+
+        if (ship.power > 1) then
+          ship.power -= 1
+        end
+      end
+    end
+
+    -- enemy collisions
+    for i = #enemies, 1, -1 do
+      local enemy = enemies[i]
+
+      if collision(enemy, ship) then
+        if ship.lives > 0 then
+          ship_hit(enemy)
+          deli(enemies, i)
+        end
+      end
+    end
+  else
+    init_game_over()
   end
 end
 

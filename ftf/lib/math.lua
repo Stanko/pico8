@@ -17,3 +17,7 @@ function pow(x, y)
 
   return result
 end
+
+function round(number)
+  return flr(number + 0.5)
+end

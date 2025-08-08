@@ -56,19 +56,11 @@ function update_enemy_bomber(enemy, i)
         rate = 3,
         frames = { 40, 41, 42 }
       }, function()
-        if (enemy) then
+        if (not enemy.hit) then
           spawn_enemy_bullet(enemy.x, enemy.y + 8)
           enemy.shooting = false
         end
       end)
-    end
-  end
-
-  if enemy.y > 140 then
-    deli(enemies, i)
-
-    if (level_part == "shoot-em-up") then
-      spawn_enemy()
     end
   end
 end
@@ -126,14 +118,6 @@ function update_enemy_fighter(enemy, i)
   else
     enemy.dir = "still"
   end
-
-  if enemy.y > 140 then
-    deli(enemies, i)
-
-    if (level_part == "shoot-em-up") then
-      spawn_enemy()
-    end
-  end
 end
 
 function update_enemies_bullets_collisions()
@@ -144,7 +128,7 @@ function update_enemies_bullets_collisions()
     for enemy_index = #enemies, 1, -1 do
       local enemy = enemies[enemy_index]
       if collision(enemy, bullet) then
-        bullet.hit = true
+        enemy.hit = true
         deli(bullets, bullet_index)
         deli(enemies, enemy_index)
 
@@ -152,8 +136,7 @@ function update_enemies_bullets_collisions()
         spawn_enemy()
         play_sound(2)
 
-        -- TODO
-        -- score += 6
+        score += 6
 
         -- local rotation_speed = rnd(1) + 1
 
@@ -240,6 +223,14 @@ function update_enemies()
       update_enemy_fighter(enemy, i)
     elseif enemy.type == "bomber" then
       update_enemy_bomber(enemy, i)
+    end
+
+    if enemy.y > 140 then
+      deli(enemies, i)
+
+      if (level_state == "shoot_em_up") then
+        spawn_enemy()
+      end
     end
   end
 
