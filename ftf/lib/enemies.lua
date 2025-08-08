@@ -138,77 +138,7 @@ function update_enemies_bullets_collisions()
 
         score += 6
 
-        -- local rotation_speed = rnd(1) + 1
-
-        -- local pickup_options = {
-        --   {
-        --     condition = ship.power < 3,
-        --     type = "power",
-        --     sprite = { 80, 81 },
-        --   },
-        --   {
-        --     condition = ship.lives < 3,
-        --     type = "hp",
-        --     sprite = { 29, 30 },
-        --   },
-        --   {
-        --     condition = ship.super < 3,
-        --     type = "super",
-        --     sprite = { 96, 97 },
-        --   }
-        -- }
-
-        -- local p = rnd(pickup_options)
-
-        -- local radius = flr(rnd(5)) + 17
-        -- if (rnd(1) > 0.5) then
-        --   radius = radius * -1
-        -- end
-
-        -- if (p.condition and rnd(1) > 0.8) then
-        --   add(pickups, {
-        --     center = { x = enemy.x - cos(frame * 0.01 * rotation_speed) * radius, y = enemy.y - sin(frame * 0.01 * rotation_speed) * radius },
-        --     radius = radius,
-        --     x = enemy.x,
-        --     y = enemy.y,
-        --     type = p.type,
-        --     sprite = p.sprite,
-        --     speed = 1,
-        --     rotation_speed = rotation_speed,
-        --     r = 5,
-        --     c = { x = 0, y = 0 },
-        --   })
-        -- elseif (#sts.deck <= 17) and rnd(1) > 0.98 then
-        --   -- user starts with 14 cards, and can add only 3 more
-        --   local cards_options = {
-        --     {
-        --       type = "weak",
-        --       sprite = { card_sprites.weak }
-        --     },
-        --     {
-        --       type = "super",
-        --       sprite = { card_sprites.super }
-        --     },
-        --     {
-        --       type = "bash",
-        --       sprite = { card_sprites.bash }
-        --     }
-        --   }
-        --   local card = rnd(cards_options)
-
-        --   add(pickups, {
-        --     center = { x = enemy.x - cos(frame * 0.01 * rotation_speed) * radius, y = enemy.y - sin(frame * 0.01 * rotation_speed) * radius },
-        --     radius = radius,
-        --     x = enemy.x,
-        --     y = enemy.y,
-        --     type = card.type,
-        --     sprite = card.sprite,
-        --     speed = 1,
-        --     rotation_speed = rotation_speed,
-        --     r = 6,
-        --     c = { x = 0, y = 0 },
-        --   })
-        -- end
+        spawn_pickup(enemy.x, enemy.y)
         break
       end
     end

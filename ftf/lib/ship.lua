@@ -85,10 +85,6 @@ end
 function update_ship_shoot_em_up()
   if (ship.lives > 0) then
     -- TODO move to the game controller
-    -- add enemy to increase difficulty every 180 frames (6 seconds)
-    -- if (level_frame % 180 == 0) then
-    --   spawn_enemy()
-    -- end
 
     ship.x_dir = "still"
     ship.y_dir = "still"
@@ -209,6 +205,29 @@ function update_ship_shoot_em_up()
         if ship.lives > 0 then
           ship_hit(enemy)
           deli(enemies, i)
+        end
+      end
+    end
+
+    -- pickups collisions
+    for i = #pickups, 1, -1 do
+      local pickup = pickups[i]
+
+      if collision(pickup, ship) then
+        if ship.lives > 0 then
+          play_sound(3)
+          deli(pickups, i)
+
+          if pickup.type == "power" and ship.power < 3 then
+            ship.power += 1
+          elseif pickup.type == "hp" and ship.lives < 3 then
+            ship.lives += 1
+          elseif pickup.type == "super" and ship.super < 3 then
+            ship.super += 1
+            -- TODO
+            -- elseif pickup.type == "weak" or pickup.type == "super" or pickup.type == "bash" then
+            --   add(sts.deck, pickup.type)
+          end
         end
       end
     end

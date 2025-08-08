@@ -16,9 +16,11 @@ __lua__
 #include lib/helpers.lua
 #include lib/math.lua
 #include lib/menu.lua
+#include lib/pickups.lua
 #include lib/score.lua
 #include lib/settings.lua
 #include lib/ship.lua
+#include lib/shoot_em_up_ui.lua
 #include lib/sound.lua
 #include lib/stars.lua
 #include lib/super_weapon.lua

@@ -28,7 +28,7 @@ function _update()
   update_animations()
 
   if scene == "menu" then
-    update_active_menu()
+    update_main_menu()
   elseif scene == "high_scores" then
     update_high_scores()
   elseif scene == "level_one" then
@@ -44,7 +44,7 @@ function _draw()
   draw_stars()
 
   if scene == "menu" then
-    draw_active_menu()
+    draw_main_menu()
   elseif scene == "high_scores" then
     draw_high_scores()
   elseif scene == "level_one" then
