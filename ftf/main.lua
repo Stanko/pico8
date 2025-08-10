@@ -2,7 +2,7 @@ function _init()
   debug = ""
   frame = 0
 
-  cartdata("never_astronaut_muffinman_gundam")
+  cartdata("muffinman_io_ftf")
 
   -- when the game is first played, flag 63 is set to 1
   if (dget(STORAGE_ALREADY_PLAYED) != 1) then
@@ -13,7 +13,7 @@ function _init()
     -- TODO remove or replace
     for i = 1, 10 do
       local offset = (i - 1) * 2
-      dset(STORAGE_HIGH_SCORES_START + offset, str_to_number("gnd"))
+      dset(STORAGE_HIGH_SCORES_START + offset, str_to_number("ftf"))
       dset(STORAGE_HIGH_SCORES_START + offset + 1, 100 - (i - 1) * 10)
     end
   end
@@ -21,11 +21,13 @@ function _init()
   init_stars()
   init_animations()
   init_main_menu()
+  init_single_actions()
 end
 
 function _update()
   update_stars()
   update_animations()
+  update_single_actions()
 
   if scene == "menu" then
     update_main_menu()

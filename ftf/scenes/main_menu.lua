@@ -21,12 +21,12 @@ menu_main = {
 }
 
 menu_settings = {
-  {
-    label = "difficulty",
-    options = { "easy", "medium", "hard" },
-    default = 1,
-    location = STORAGE_DIFFICULTY,
-  },
+  -- {
+  --   label = "difficulty",
+  --   options = { "easy", "medium", "hard" },
+  --   default = 1,
+  --   location = STORAGE_DIFFICULTY,
+  -- },
   {
     label = "music",
     options = { "off", "on" },

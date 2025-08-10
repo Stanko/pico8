@@ -7,6 +7,7 @@ function init_ship()
     y = 100,
     x_dir = "still",
     y_dir = "up",
+    movement = nil,
 
     -- colission box
     r = 4,
@@ -236,6 +237,44 @@ function update_ship_shoot_em_up()
   end
 end
 
+function update_ship_deck_builder()
+  -- enemy bullets collisions
+  for i = #enemy_bullets, 1, -1 do
+    -- local bullet = enemy_bullets[i]
+
+    -- if collision(bullet, ship) then
+    --   -- save a copy
+    --   local ship_shield = ship.shield
+
+    --   -- update the shields
+    --   ship.shield -= hit
+    --   if ship.shield <= 0 then
+    --     ship.shield = 0
+    --   end
+
+    --   -- reduce the hit
+    --   hit = hit - ship_shield
+    --   if hit <= 0 then
+    --     hit = 0
+    --   end
+
+    --   -- finally remove the hp
+    --   ship.hp -= hit
+
+    --   play_sound(1)
+    --   deli(enemy_bullets, i)
+
+    --   if (ship.hp <= 0) then
+    --     ship.hp = 0
+    --     spawn_explosions(ship.x, ship.y, 12, 12, 10, 15)
+    --     -- TODO change game state
+    --   else
+    --     spawn_explosion(bullet.x, bullet.y)
+    --   end
+    -- end
+  end
+end
+
 function draw_ship()
   if (ship.lives == 0 or ship.hp == 0) then
     return
@@ -254,24 +293,6 @@ function draw_ship()
     thrusters_offset = ship.down_offsets[ship.x_dir]
   end
   animate(thrusters, ship.x + thrusters_offset.x, ship.y + thrusters_offset.y, 5)
-
-  -- -- hp and shield
-  -- local won = ship.fly_away_frame > 0 or ship.flown_away == true
-
-  -- if is_boss_fight_pending() == false and won == false then
-  --   local shield_left = flr(ship.x - 2 - (ship.shield - 1) * 5 / 2)
-  --   for i = 1, ship.shield do
-  --     spr(221, shield_left + (i - 1) * 5, ship.y - 16)
-  --   end
-
-  --   -- hp
-  --   draw_hp_bar(ship.hp, ship.max_hp, 95, 101)
-
-  --   -- energy
-  --   for i = 1, ship.energy do
-  --     spr(202, 4, 116 - (i - 1) * 4)
-  --   end
-  -- end
 
   draw_col(ship)
 end

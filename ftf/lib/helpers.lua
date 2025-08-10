@@ -118,3 +118,19 @@ function sort_table_by_field(data, field, desc)
 
   return data
 end
+
+function shuffle(t)
+  -- copy original table
+  local temp = {}
+  for i = 1, #t do
+    add(temp, t[i])
+  end
+
+  -- shuffle the copy
+  for i = #temp, 2, -1 do
+    local j = flr(rnd(i)) + 1
+    temp[i], temp[j] = temp[j], temp[i]
+  end
+
+  return temp
+end

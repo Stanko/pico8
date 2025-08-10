@@ -4,9 +4,10 @@ function init_enemy_bullets()
   enemy_bullets = {}
 end
 
-function spawn_enemy_bullet(x, y, direction, animation)
+function spawn_enemy_bullet(x, y, direction, animation, power)
   direction = direction or direction or { x = 0, y = -5 }
   animation = animation or default_animation
+  power = power or 1
 
   add(enemy_bullets, {
     x = x,
@@ -14,7 +15,8 @@ function spawn_enemy_bullet(x, y, direction, animation)
     r = 2,
     c = { x = 0, y = 0 },
     animation = animation,
-    direction = direction
+    direction = direction,
+    power
   })
 
   play_sound(0)
