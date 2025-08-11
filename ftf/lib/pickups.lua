@@ -95,6 +95,6 @@ function draw_pickups()
   for i = 1, #pickups do
     local pickup = pickups[i]
     animate(pickup.sprite, pickup.x, pickup.y, 10)
-    draw_col(pickup)
+    -- draw_col(pickup)
   end
 end

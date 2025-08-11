@@ -45,49 +45,42 @@ function collision(obj1, obj2)
 end
 
 -- draws collision circle outline
-local col_colors = { 8, 10 }
+-- local col_colors = { 8, 10 }
 
-function draw_col(obj)
-  if (COLLISSION_DEBUG) then
-    local r = obj.r
-    local i = flr(frame / 15) % 2 + 1
-    local c = obj.c
-    local x1 = obj.x + c.x - r
-    local y1 = obj.y + c.y - r
-    local x2 = obj.x + r + c.x - 1
-    local y2 = obj.y + r + c.y - 1
+-- function draw_col(obj)
+--   if (COLLISSION_DEBUG) then
+--     local r = obj.r
+--     local i = flr(frame / 15) % 2 + 1
+--     local c = obj.c
+--     local x1 = obj.x + c.x - r
+--     local y1 = obj.y + c.y - r
+--     local x2 = obj.x + r + c.x - 1
+--     local y2 = obj.y + r + c.y - 1
 
-    -- outter and inner black rings
-    oval(x1 - 1, y1 - 1, x2 + 1, y2 + 1, 0)
-    oval(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0)
-    -- blinking yellow/red ring
-    oval(x1, y1, x2, y2, col_colors[i])
-  end
-end
+--     -- outter and inner black rings
+--     oval(x1 - 1, y1 - 1, x2 + 1, y2 + 1, 0)
+--     oval(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0)
+--     -- blinking yellow/red ring
+--     oval(x1, y1, x2, y2, col_colors[i])
+--   end
+-- end
 
-function to_string(o)
-  if type(o) == "function" then return "function" end
-  if o == nil then return "nil" end
-  if type(o) == "string" then return o end
-  if type(o) == "boolean" then return o and "true" or "false" end
-  if type(o) == "number" then return "" .. o end
-  if type(o) == "table" then -- recursion
-    local str = "{\n"
-    for k, v in pairs(o) do
-      str = str .. " " .. to_string(k) .. ":" .. to_string(v) .. "\n"
-    end
-    return str .. "}"
-  end
-  return "unkown" -- should never show
-end
+-- function to_string(o)
+--   if type(o) == "function" then return "function" end
+--   if o == nil then return "nil" end
+--   if type(o) == "string" then return o end
+--   if type(o) == "boolean" then return o and "true" or "false" end
+--   if type(o) == "number" then return "" .. o end
+--   if type(o) == "table" then -- recursion
+--     local str = "{\n"
+--     for k, v in pairs(o) do
+--       str = str .. " " .. to_string(k) .. ":" .. to_string(v) .. "\n"
+--     end
+--     return str .. "}"
+--   end
+--   return "unkown" -- should never show
+-- end
 
-function reverse_table(data)
-  local reversed = {}
-  for i = #data, 1, -1 do
-    add(reversed, data[i])
-  end
-  return reversed
-end
 
 function sort_table_by_field(data, field, desc)
   -- move a partition backwards,
@@ -112,11 +105,12 @@ function sort_table_by_field(data, field, desc)
     data[i] = new_val
   end
 
-  if desc then
-    return reverse_table(data)
+  local reversed = {}
+  for i = #data, 1, -1 do
+    add(reversed, data[i])
   end
 
-  return data
+  return reversed
 end
 
 function shuffle(t)

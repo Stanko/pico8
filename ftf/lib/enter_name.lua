@@ -1,5 +1,3 @@
-local max_str_len = 3
-
 -- charset and maps
 local charset     = "abcdefghijklmnopqrstuvwxyz0123456789 ._-*"
 local char_to_int = {}
@@ -13,7 +11,7 @@ end
 
 function str_to_number(s)
   local v = {}
-  for i = 1, max_str_len do
+  for i = 1, 3 do
     local ch = sub(s, i, i) or "a"
     local idx = char_to_int[ch] or 0
     v[i] = idx
@@ -22,9 +20,9 @@ function str_to_number(s)
 end
 
 function number_to_str(number)
-  local c1 = (round((number % 1) * #charset))
-  local c2 = (flr(number) % #charset)
-  local c3 = (flr(number - c2) / #charset) -- % #charset
+  local c1 = flr((number % 1) * #charset + 0.5)
+  local c2 = flr(number) % #charset
+  local c3 = flr(number - c2) / #charset -- % #charset
 
   local ch1 = int_to_char[c1] or 'a'
   local ch2 = int_to_char[c2] or 'a'
@@ -44,9 +42,9 @@ end
 function update_enter_name(callback)
   -- left/right to move cursor
   if btnp(0) then
-    name_selected_letter = (name_selected_letter - 2) % max_str_len + 1
+    name_selected_letter = (name_selected_letter - 2) % 3 + 1
   elseif btnp(1) then
-    name_selected_letter = name_selected_letter % max_str_len + 1
+    name_selected_letter = name_selected_letter % 3 + 1
   end
 
   -- get current char index
@@ -63,7 +61,7 @@ function update_enter_name(callback)
   local new_ch = int_to_char[idx] or "."
   name = sub(name, 1, name_selected_letter - 1) ..
       new_ch ..
-      sub(name, name_selected_letter + 1, max_str_len)
+      sub(name, name_selected_letter + 1, 3)
 
   -- save name
   if (btnp(4) or btnp(5)) and callback then
@@ -83,7 +81,7 @@ function draw_enter_name(top)
   print(msg, 64 - #msg * 2, top + 7, 5)
 
   local ui_string = ""
-  for i = 1, max_str_len do
+  for i = 1, 3 do
     local ch = sub(name, i, i)
     ui_string = ui_string .. ch .. " "
   end

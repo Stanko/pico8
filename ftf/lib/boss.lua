@@ -12,6 +12,7 @@ function init_boss()
 
     weak = 0,
     vulnerable = 0,
+    shield = 0,
 
     sprite = {
       { 128, 129, 130, 131, 132, 133, 134, 135, 136 },
@@ -38,11 +39,11 @@ function init_boss()
       if (boss.move_label == "attack") then
         local bullet_count = random_int(1, 3)
         boss.move = function()
-          boss_moves.attack(bullet_count)
+          available_moves.attack(bullet_count)()
         end
         boss.move_label = boss.move_label .. " X" .. bullet_count
       else
-        boss.move = available_moves[boss.move_label]
+        boss.move = available_moves[boss.move_label]()
       end
     end
   }
@@ -55,29 +56,24 @@ function init_boss()
         label = label .. 'x' .. bullet_count
       end
 
-      local fn = function()
-        local x_positions = shuffle({ -6, 6, 0 })
+      return function()
+        local positions = shuffle({ { x = -7, y = 12 }, { x = 7, y = 12 }, { x = 0, y = 16 } })
 
         for i = 1, bullet_count do
           add_animation({
             position = boss,
-            offset = { x = x_positions[i], y = 8 },
+            offset = positions[i],
             rate = 3,
             frames = { 40, 41, 42 },
             delay = (i - 1) * 5
           }, function()
-            spawn_enemy_bullet(boss.x + x_positions[i], boss.y + 8)
+            spawn_enemy_bullet(boss.x + positions[i].x, boss.y + positions[i].y)
           end)
         end
       end
-
-      return {
-        fn = fn,
-        label = label
-      }
     end,
     shield_and_attack = function()
-      local fn = function()
+      return function()
         local shield = random_int(1, 3)
 
         for i = 1, shield do
@@ -90,17 +86,17 @@ function init_boss()
         -- shoot once
         add_animation({
           position = boss,
-          offset = { x = x_positions[i], y = 8 },
+          offset = { x = 0, y = 16 },
           rate = 3,
           frames = { 40, 41, 42 },
           delay = shield * 10
         }, function()
-          spawn_enemy_bullet(boss.x + x_positions[i], boss.y + 8)
+          spawn_enemy_bullet(boss.x, boss.y + 16)
         end)
       end
     end,
     shield = function()
-      local fn = function()
+      return function()
         local shield = random_int(1, 3)
 
         for i = 1, shield do
@@ -110,14 +106,9 @@ function init_boss()
           end, (i - 1) * 10)
         end
       end
-
-      return {
-        fn = fn,
-        label = "heal"
-      }
     end,
     heal = function()
-      local fn = function()
+      return function()
         local hp = min(random_int(1, 3), boss.max_hp - boss.hp)
 
         for i = 1, hp do
@@ -127,36 +118,37 @@ function init_boss()
           end, (i - 1) * 10)
         end
       end
-
-      return {
-        fn = fn,
-        label = "heal"
-      }
     end
   }
 
   boss.move = function()
-    available_moves.attack(2).fn()
+    available_moves.attack(2)()
   end
 end
 
 function end_boss_turn()
   ship.shield = 0
-  ship.energy = 3
+  ship.energy = ship.max_energy
   boss.set_next_move()
+  hand = get_hand()
+  deal_hand()
   turn = "player"
 end
 
 function update_boss()
-  if level_state == "boss_fight" then
+  if boss.in_position then
     if (turn == "boss") then
       if not boss.played then
+        -- debug = debug .. "boss playing" .. boss.move_label .. "\n"
         boss.played = true
-        boss.move()
 
         do_once(function()
-          end_boss_turn()
-        end, 90)
+          boss.move()
+
+          do_once(function()
+            end_boss_turn()
+          end, 60)
+        end, 20)
       end
     end
 
@@ -165,13 +157,31 @@ function update_boss()
       local bullet = bullets[i]
 
       if collision(bullet, boss) then
-        boss.hp -= 1
+        -- save a copy
+        local boss_shield = boss.shield
+        local hit = 1
+
+        if (boss.vulnerable > 0) then
+          hit = 2
+        end
+
+        -- update the shields
+        boss.shield -= hit
+        if boss.shield <= 0 then
+          boss.shield = 0
+        end
+
+        -- reduce the hit
+        hit = hit - boss_shield
+        if hit <= 0 then
+          hit = 0
+        end
+
+        -- finally remove the hp
+        boss.hp -= hit
+
         play_sound(1)
         deli(bullets, i)
-
-        if boss.vulnerable > 0 then
-          boss.hp -= 1
-        end
 
         if (boss.hp <= 0) then
           if added_boss_score == false then
@@ -191,7 +201,7 @@ function update_boss()
               boss.sprite,
               boss.sprite_halftone,
               boss.sprite,
-              boss.sprite_halftone,
+              boss.sprite_halftone
             },
             rate = 5,
             bg_color = 7,
@@ -204,7 +214,13 @@ function update_boss()
           do_once(function()
             level_state = "win_transition"
             move_to(ship, 64, -16, 2, function()
-              level_state = "win"
+              ship.y = 144
+
+              do_once(function()
+                move_to(ship, 64, 100, 2, function()
+                  init_level_one(true)
+                end)
+              end, 10)
             end)
           end, 30)
         else
@@ -216,7 +232,7 @@ function update_boss()
 end
 
 function draw_boss()
-  if (boss.hp > 0) then
+  if (boss and boss.hp > 0) then
     local offset = 0
     if boss.in_position then
       offset = flr(frame / 30) % 2
@@ -227,6 +243,19 @@ function draw_boss()
 
         -- hp
         draw_hp_bar(boss.hp, boss.max_hp, 8, 12)
+
+        if boss.weak > 0 then
+          spr(175, boss.x + 40, boss.y + offset - 5)
+          if boss.weak > 1 then
+            print("X" .. boss.weak, boss.x + 50, boss.y + offset - 3, 8)
+          end
+        end
+        if boss.vulnerable > 0 then
+          spr(159, boss.x + 40, boss.y + offset - 14)
+          if boss.vulnerable > 1 then
+            print("X" .. boss.vulnerable, boss.x + 50, boss.y + offset - 12, 8)
+          end
+        end
       end
     end
 
@@ -235,19 +264,11 @@ function draw_boss()
     multi_spr(boss.sprite, boss.x, boss.y + offset)
     palt()
 
-    if boss.weak > 0 then
-      spr(218, boss.x + 40, boss.y + offset - 4)
-      if boss.weak > 1 then
-        print("X" .. boss.weak, boss.x + 50, boss.y + offset - 4, 14)
-      end
-    end
-    if boss.vulnerable > 0 then
-      spr(219, boss.x + 40, boss.y + offset - 12)
-      if boss.vulnerable > 1 then
-        print("X" .. boss.vulnerable, boss.x + 50, boss.y + offset - 12, 8)
-      end
+    local shield_left = flr(62 - (boss.shield - 1) * 5 / 2)
+    for i = 1, boss.shield do
+      spr(221, shield_left + (i - 1) * 5, boss.y - 12)
     end
 
-    draw_col(boss)
+    -- draw_col(boss)
   end
 end

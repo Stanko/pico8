@@ -31,9 +31,9 @@ function card_back_3(x, y)
   line(x + 1, y + 10, x + 1, y + 10, 0)
 end
 
-function card_side(x, y)
-  line(x, y, x, y + 12, 2)
-end
+-- function card_side(x, y)
+--   line(x, y, x, y + 12, 2)
+-- end
 
 function card_front_3(x, y, sprite)
   card_rect(x, y, 2, 12, 2, 1)
@@ -95,16 +95,22 @@ end
 function get_card(type)
   local sprites = {
     super = { 127, 126, 125 },
+    bash = { 159, 158, 157 },
+    weak = { 175, 174, 173 },
     shield = { 143, 142, 141 },
     attack = { 111, 110, 109 },
   }
   local cost = {
     super = 2,
+    bash = 2,
+    weak = 2,
     shield = 1,
     attack = 1,
   }
   local color = {
     super = 9,
+    bash = 8,
+    weak = 14,
     shield = 12,
     attack = 11,
   }
@@ -112,8 +118,8 @@ function get_card(type)
   local card = {
     type = type,
 
-    x = 64,
-    y = 64,
+    x = 120,
+    y = 120,
 
     movement = nil,
 
@@ -129,7 +135,7 @@ function get_card(type)
     function() card_back(card.x - 5, card.y - 8) end,
     function() card_back_2(card.x - 3, card.y - 8) end,
     function() card_back_3(card.x - 1, card.y - 8) end,
-    function() card_side(card.x, card.y - 8) end,
+    -- function() card_side(card.x, card.y - 8) end,
     function() card_front_3(card.x - 1, card.y - 8, sprites[type][3]) end,
     function() card_front_2(card.x - 3, card.y - 8, sprites[type][2]) end,
     function() card_front(card.x - 5, card.y - 8, sprites[type][1]) end,

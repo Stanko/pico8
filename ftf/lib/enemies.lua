@@ -9,114 +9,64 @@ function init_enemies()
 end
 
 function spawn_enemy(y)
-  if rnd(1) > 0.5 then
-    spawn_enemy_fighter(y)
-  else
-    spawn_enemy_bomber(y)
-  end
-end
-
-function spawn_enemy_bomber(y)
   local x = random_int(8, 120) -- 8 padding on each side
-  local speed = random(1, 3)
-
   y = y or flr(rnd(128)) * -1
 
-  add(enemies, {
-    type = "bomber",
+  if rnd(1) > 0.5 then
+    local x_movement = random_int(16, 48);
+    local speed = random(3, 5)
 
-    -- position
-    x = x,
-    y = y,
-
-    -- movement
-    speed = speed,
-
-    -- fire
-    wind_up = 0,
-
-    -- collision box
-    r = 6,
-    c = { x = 0, y = 0 },
-
-    -- sprite
-    sprite = { { 137, 138 }, { 153, 154 } },
-  })
-end
-
-function update_enemy_bomber(enemy, i)
-  enemy.y = enemy.y + enemy.speed
-
-  if enemy.y > 5 and enemy.y < 20 then
-    if (rnd(1) > 0.9 and not enemy.shooting) then
-      enemy.shooting = true
-      add_animation({
-        position = enemy,
-        offset = { x = 0, y = 8 },
-        rate = 3,
-        frames = { 40, 41, 42 }
-      }, function()
-        if (not enemy.hit) then
-          spawn_enemy_bullet(enemy.x, enemy.y + 8)
-          enemy.shooting = false
-        end
-      end)
+    if rnd(1) > 0.5 then
+      x_movement = x_movement * -1
     end
-  end
-end
 
-function spawn_enemy_fighter(y)
-  local x = random_int(8, 120) -- 8 padding on each side
-  local x_movement = random_int(16, 48);
-  local speed = random(3, 5)
+    add(enemies, {
+      type = "fighter",
 
-  if rnd(1) > 0.5 then
-    x_movement = x_movement * -1
-  end
+      -- position
+      x = x,
+      y = y,
 
-  y = y or flr(rnd(128)) * -1
+      -- movement
+      speed = speed,
+      x_movement = x_movement,
+      start_x = x,
+      start_frame = frame,
 
-  add(enemies, {
-    type = "fighter",
+      -- colission box
+      r = 6,
+      c = { x = 0, y = 0 },
 
-    -- position
-    x = x,
-    y = y,
-
-    -- movement
-    speed = speed,
-    x_movement = x_movement,
-    start_x = x,
-    start_frame = frame,
-
-    -- colission box
-    r = 6,
-    c = { x = 0, y = 0 },
-
-    -- sprite
-    dir = "still",
-    sprite = {
-      still = { { 6, 7 }, { 22, 23 } },
-      right = { { 8, 9 }, { 24, 25 } },
-      left = { { 10, 11 }, { 26, 27 } },
-    },
-
-    -- TODO update
-  })
-end
-
-function update_enemy_fighter(enemy, i)
-  local delta = frame - enemies[i].start_frame
-  local s = sin(delta * 0.01)
-  enemy.y = enemy.y + enemy.speed
-  enemy.x = enemy.start_x + s * enemy.x_movement
-
-  if (s > 0.1) then
-    enemy.dir = "right"
-  elseif (s < -0.1) then
-    enemy.dir = "left"
+      -- sprite
+      dir = "still",
+      sprite = {
+        still = { { 6, 7 }, { 22, 23 } },
+        right = { { 8, 9 }, { 24, 25 } },
+        left = { { 10, 11 }, { 26, 27 } },
+      },
+    })
   else
-    enemy.dir = "still"
+    local speed = random(1, 3)
+    add(enemies, {
+      type = "bomber",
+
+      -- position
+      x = x,
+      y = y,
+
+      -- movement
+      speed = speed,
+
+      -- fire
+      wind_up = 0,
+
+      -- collision box
+      r = 6,
+      c = { x = 0, y = 0 },
+
+      -- sprite
+      sprite = { { 137, 138 }, { 153, 154 } },
+    })
   end
 end
 
@@ -148,11 +98,37 @@ end
 function update_enemies()
   for i = #enemies, 1, -1 do
     local enemy = enemies[i]
+    enemy.y = enemy.y + enemy.speed
 
     if enemy.type == "fighter" then
-      update_enemy_fighter(enemy, i)
+      local delta = frame - enemies[i].start_frame
+      local s = sin(delta * 0.01)
+      enemy.x = enemy.start_x + s * enemy.x_movement
+
+      if (s > 0.1) then
+        enemy.dir = "right"
+      elseif (s < -0.1) then
+        enemy.dir = "left"
+      else
+        enemy.dir = "still"
+      end
     elseif enemy.type == "bomber" then
-      update_enemy_bomber(enemy, i)
+      if enemy.y > 5 and enemy.y < 20 then
+        if (rnd(1) > 0.9 and not enemy.shooting) then
+          enemy.shooting = true
+          add_animation({
+            position = enemy,
+            offset = { x = 0, y = 8 },
+            rate = 3,
+            frames = { 40, 41, 42 }
+          }, function()
+            if (not enemy.hit) then
+              spawn_enemy_bullet(enemy.x, enemy.y + 8)
+              enemy.shooting = false
+            end
+          end)
+        end
+      end
     end
 
     if enemy.y > 140 then

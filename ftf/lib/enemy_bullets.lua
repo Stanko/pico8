@@ -1,13 +1,8 @@
 local default_animation = { 14, 15 }
 
-function init_enemy_bullets()
-  enemy_bullets = {}
-end
-
-function spawn_enemy_bullet(x, y, direction, animation, power)
+function spawn_enemy_bullet(x, y, direction, animation)
   direction = direction or direction or { x = 0, y = -5 }
   animation = animation or default_animation
-  power = power or 1
 
   add(enemy_bullets, {
     x = x,
@@ -16,7 +11,6 @@ function spawn_enemy_bullet(x, y, direction, animation, power)
     c = { x = 0, y = 0 },
     animation = animation,
     direction = direction,
-    power
   })
 
   play_sound(0)
@@ -37,6 +31,6 @@ function draw_enemy_bullets()
   for i = 1, #enemy_bullets do
     local bullet = enemy_bullets[i]
     animate(bullet.animation, bullet.x, bullet.y, 10)
-    draw_col(bullet)
+    -- draw_col(bullet)
   end
 end

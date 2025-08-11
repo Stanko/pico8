@@ -2,6 +2,10 @@ function _init()
   debug = ""
   frame = 0
 
+  score = 0
+
+  level_repeated = 1
+
   cartdata("muffinman_io_ftf")
 
   -- when the game is first played, flag 63 is set to 1
@@ -22,6 +26,7 @@ function _init()
   init_animations()
   init_main_menu()
   init_single_actions()
+  init_ship()
 end
 
 function _update()
@@ -53,8 +58,7 @@ function _draw()
     draw_level_one()
   end
 
-
   draw_animations()
 
-  print(debug, 0, 8)
+  print(debug, 0, 8, 7)
 end

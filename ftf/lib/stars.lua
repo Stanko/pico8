@@ -3,31 +3,31 @@ function init_stars()
   stars_global_speed = 1
 
   for i = 1, 30 do
-    stars[i] = {
+    add(stars, {
       x = flr(rnd(128)),
       y = flr(rnd(256)) - 128,
       speed = 1,
       color = 1,
       r = rnd(2)
-    }
+    })
   end
   for i = 1, 16 do
-    stars[i] = {
+    add(stars, {
       x = flr(rnd(128)),
       y = flr(rnd(256)) - 128,
       speed = 2,
       color = 5,
       r = rnd(2)
-    }
+    })
   end
   for i = 1, 5 do
-    stars[i] = {
+    add(stars, {
       x = flr(rnd(128)),
       y = flr(rnd(256)) - 128,
       speed = 3,
       color = 13,
       r = 1
-    }
+    })
   end
 end
 

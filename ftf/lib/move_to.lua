@@ -22,8 +22,8 @@ function move_to(obj, x, y, speed, callback)
 end
 
 function move_to_over_time(obj, x, y, duration, easing, callback, delay)
-  local easing = easing or function(t) return 1 - pow(1 - t, 2) end -- ease out
-  local delay = delay or 0
+  easing = easing or function(t) return 1 - (1 - t) * (1 - t) end -- ease out
+  delay = delay or 0
 
   obj.movement = {
     type = "time",
@@ -44,7 +44,7 @@ function move_to_over_time(obj, x, y, duration, easing, callback, delay)
 end
 
 update_movement = function(obj)
-  if obj and obj.movement then
+  if obj.movement then
     update_movement_methods[obj.movement.type](obj, obj.movement)
   end
 end
@@ -103,15 +103,3 @@ update_movement_methods.time = function(obj, movement)
     obj.movement = nil
   end
 end
-
-
--- if (btnp(4)) then
---   add_movement(ball, random_int(10, 118), random_int(10, 118), 3, function()
---     print("Ball moved!")
---   end)
--- end
--- if (btnp(5)) then
---   add_movement_over_time(ball, random_int(10, 118), random_int(10, 118), 30, nil, function()
---     print("Ball moved over time!")
---   end)
--- end

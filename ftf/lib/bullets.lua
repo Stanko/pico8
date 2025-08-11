@@ -70,6 +70,6 @@ function draw_bullets()
   for i = 1, #bullets do
     local bullet = bullets[i]
     animate(bullet.animation, bullet.x, bullet.y, 10)
-    draw_col(bullet)
+    -- draw_col(bullet)
   end
 end

@@ -24,7 +24,7 @@ function add_high_score(name, score)
 
   add(high_scores, { name = name, score = score })
 
-  high_scores = sort_table_by_field(high_scores, "score", true)
+  high_scores = sort_table_by_field(high_scores, "score")
 
   -- Add this before sorting to check your data
   function debug_table(t, field)

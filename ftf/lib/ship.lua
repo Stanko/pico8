@@ -1,5 +1,3 @@
--- TODO move to the ship object
-
 function init_ship()
   ship = {
     -- position
@@ -32,11 +30,6 @@ function init_ship()
     max_hp = 10,
     energy = 3,
     max_energy = 3,
-
-    -- TODO these are deprecated, remove
-    fly_away_frame = -1,
-    flown_away = false,
-    moved_to_boss_fight_position = false,
 
     sprite = {
       still = { { 0, 1 }, { 16, 17 } },
@@ -129,15 +122,10 @@ function update_ship_shoot_em_up()
     ship.y += move.y
 
     -- limit ship to screen boundaries
-    if (ship.y < 8) then
-      ship.y = 8
-    elseif (ship.y > 118) then
-      ship.y = 118
-    elseif (ship.x < 8) then
-      ship.x = 8
-    elseif (ship.x > 120) then
-      ship.x = 120
-    end
+    ship.y = max(ship.y, 8)
+    ship.y = min(ship.y, 120)
+    ship.x = max(ship.x, 8)
+    ship.x = min(ship.x, 120)
 
     -- fire
     if btnp(4) or btn(4) then
@@ -156,7 +144,7 @@ function update_ship_shoot_em_up()
         }
 
         local positions = bullet_x_positions[ship.power]
-        local directions = bullet_directions[ship.power]
+        -- local directions = bullet_directions[ship.power]
         for i = 1, #positions do
           -- TODO implement nicer spread
           -- spawn_bullet(positions[i], ship.y - 8, directions[i])
@@ -181,6 +169,8 @@ function update_ship_shoot_em_up()
         if (score > 8) then
           score -= 8
         end
+      else
+        play_sound(20)
       end
     end
 
@@ -240,38 +230,43 @@ end
 function update_ship_deck_builder()
   -- enemy bullets collisions
   for i = #enemy_bullets, 1, -1 do
-    -- local bullet = enemy_bullets[i]
+    local bullet = enemy_bullets[i]
 
-    -- if collision(bullet, ship) then
-    --   -- save a copy
-    --   local ship_shield = ship.shield
+    if collision(bullet, ship) then
+      -- save a copy
+      local ship_shield = ship.shield
+      local hit = 2
 
-    --   -- update the shields
-    --   ship.shield -= hit
-    --   if ship.shield <= 0 then
-    --     ship.shield = 0
-    --   end
+      if boss.weak > 0 then
+        hit = 1
+      end
 
-    --   -- reduce the hit
-    --   hit = hit - ship_shield
-    --   if hit <= 0 then
-    --     hit = 0
-    --   end
+      -- update the shields
+      ship.shield -= hit
+      if ship.shield <= 0 then
+        ship.shield = 0
+      end
 
-    --   -- finally remove the hp
-    --   ship.hp -= hit
+      -- reduce the hit
+      hit = hit - ship_shield
+      if hit <= 0 then
+        hit = 0
+      end
 
-    --   play_sound(1)
-    --   deli(enemy_bullets, i)
+      -- finally remove the hp
+      ship.hp -= hit
 
-    --   if (ship.hp <= 0) then
-    --     ship.hp = 0
-    --     spawn_explosions(ship.x, ship.y, 12, 12, 10, 15)
-    --     -- TODO change game state
-    --   else
-    --     spawn_explosion(bullet.x, bullet.y)
-    --   end
-    -- end
+      play_sound(1)
+      deli(enemy_bullets, i)
+
+      if (ship.hp <= 0) then
+        ship.hp = 0
+        spawn_explosions(ship.x, ship.y, 12, 12, 10, 15)
+        init_game_over()
+      else
+        spawn_explosion(bullet.x, bullet.y)
+      end
+    end
   end
 end
 
@@ -294,5 +289,5 @@ function draw_ship()
   end
   animate(thrusters, ship.x + thrusters_offset.x, ship.y + thrusters_offset.y, 5)
 
-  draw_col(ship)
+  -- draw_col(ship)
 end
