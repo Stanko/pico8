@@ -132,6 +132,12 @@ function end_boss_turn()
   boss.set_next_move()
   hand = get_hand()
   deal_hand()
+  if boss.vulnerable > 0 then
+    boss.vulnerable -= 1
+  end
+  if boss.weak > 0 then
+    boss.weak -= 1
+  end
   turn = "player"
 end
 
@@ -184,7 +190,7 @@ function update_boss()
         deli(bullets, i)
 
         if (boss.hp <= 0) then
-          if added_boss_score == false then
+          if not added_boss_score then
             score += 50 + (ship.hp * 10)
             added_boss_score = true
           end

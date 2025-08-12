@@ -9,6 +9,8 @@ function init_level_one(repeat_level)
   if repeat_level then
     level_repeated += 1
   else
+    level_repeated = 1
+    score = 0
     ship.lives = 3
     ship.power = 1
     ship.super = 2
@@ -48,8 +50,6 @@ function update_level_one()
     update_game_over()
   end
 
-  level_frame = level_frame + 1
-
   if (level_frame == 1000 * level_repeated and ship.lives > 0) then
     level_state = "boss_fight_transition"
     ship.y_dir = "still"
@@ -75,6 +75,8 @@ function update_level_one()
     ship.energy = ship.max_energy
     ship.r = 6
   end
+
+  level_frame += 1
 end
 
 function draw_level_one()

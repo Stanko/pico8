@@ -86,12 +86,6 @@ function end_player_turn()
   boss.played = false
 
   boss.shield = 0
-  if boss.vulnerable > 0 then
-    boss.vulnerable -= 1
-  end
-  if boss.weak > 0 then
-    boss.weak -= 1
-  end
 
   local x = played_position.x
   local y = played_position.y

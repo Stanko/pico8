@@ -6,7 +6,7 @@ function _init()
 
   level_repeated = 1
 
-  cartdata("muffinman_io_ftf")
+  cartdata("muffinman_io_ftf_infinite")
 
   -- when the game is first played, flag 63 is set to 1
   if (dget(STORAGE_ALREADY_PLAYED) != 1) then
