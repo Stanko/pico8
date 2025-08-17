@@ -158,7 +158,7 @@ function update_ship_shoot_em_up()
     end
 
     -- super
-    if btnp(5) or btn(5) then
+    if btnp(5) then
       if get_super_weapon_progress() == 1 and ship.super > 0 then -- and level_frame > 10
         ship.super_last_shot = frame
 

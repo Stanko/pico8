@@ -2,7 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
 
-
+-- fight the fire
+-- by muffinman
 
 #include constants.lua
 #include main.lua
@@ -332,4 +333,3 @@ __music__
 00 11104344
 00 120f4344
 02 0e134344
-

@@ -6,14 +6,14 @@ function init_level_one(repeat_level)
   enemy_bullets = {}
   ship.r = 4
 
+  init_ship()
+  boss = nil
+
   if repeat_level then
     level_repeated += 1
   else
     level_repeated = 1
     score = 0
-    ship.lives = 3
-    ship.power = 1
-    ship.super = 2
   end
 
   init_settings()
